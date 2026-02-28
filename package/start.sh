@@ -16,7 +16,7 @@ mkdir -p "${VAR_DIR}"
 # VPN接続
 "$(dirname "$0")/mullvad_connect.sh"
 
-# Minimal local UI server for DSM "Open" button.
+# Local UI server for DSM "Open" button.
 if [ -f "${PID_FILE}" ] && kill -0 "$(cat "${PID_FILE}")" 2>/dev/null; then
   echo "UI server is already running on port ${UI_PORT}."
   exit 0
@@ -27,7 +27,7 @@ if [ -z "${PY_BIN}" ]; then
   exit 1
 fi
 
-"${PY_BIN}" -m http.server "${UI_PORT}" --directory "${UI_DIR}" >>"${LOG_FILE}" 2>&1 &
+"${PY_BIN}" "$(dirname "$0")/ui_server.py" >>"${LOG_FILE}" 2>&1 &
 echo $! > "${PID_FILE}"
 
 echo "DSM Magnet Downloaderパッケージ起動完了"

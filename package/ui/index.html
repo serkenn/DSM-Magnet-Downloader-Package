@@ -6,11 +6,11 @@
     <title>DSM Magnet Downloader</title>
     <style>
       :root {
-        --bg: #f5f7fa;
+        --bg: #f3f8f6;
         --card: #ffffff;
         --text: #1f2937;
         --muted: #4b5563;
-        --accent: #0f766e;
+        --accent: #0b6e4f;
         --line: #d1d5db;
       }
       * { box-sizing: border-box; }
@@ -34,6 +34,36 @@
       }
       h1 { margin: 0 0 12px; font-size: 28px; }
       p { margin: 0 0 14px; color: var(--muted); line-height: 1.6; }
+      label { display: block; margin: 0 0 8px; font-weight: 600; }
+      input {
+        width: 100%;
+        padding: 11px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        font-size: 14px;
+      }
+      button {
+        margin-top: 12px;
+        border: 0;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 8px;
+        padding: 11px 16px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:disabled { opacity: 0.65; cursor: default; }
+      pre {
+        margin: 16px 0 0;
+        background: #0f172a;
+        color: #e2e8f0;
+        border-radius: 8px;
+        padding: 12px;
+        min-height: 180px;
+        overflow: auto;
+        font-family: Menlo, Monaco, monospace;
+        font-size: 12px;
+      }
       .cmd {
         display: block;
         margin: 8px 0;
@@ -61,15 +91,44 @@
   <body>
     <div class="wrap">
       <div class="card">
-        <span class="tag">Package UI</span>
+        <span class="tag">Package UI v2</span>
         <h1>DSM Magnet Downloader</h1>
-        <p>このパッケージはバックグラウンドスクリプト中心です。現在のUIはステータス確認と実行案内用です。</p>
+        <p>URLを入力して magnet の取得と Transmission 追加を実行します。</p>
+        <label for="url">検索ページURL</label>
+        <input id="url" placeholder="https://example.com/?q=keyword" />
+        <button id="run">実行</button>
+        <pre id="out">準備完了</pre>
         <p>ログ確認:</p>
         <code class="cmd">cat /var/packages/dsm-magnet-dl/var/package.log</code>
-        <p>手動実行例:</p>
-        <code class="cmd">python3 /var/packages/dsm-magnet-dl/target/magnet_fetcher.py "https://example.com/..."</code>
         <p>リポジトリ: <a href="https://github.com/serkenn/DSM-Magnet-Downloader-Package" target="_blank" rel="noopener">GitHub</a></p>
       </div>
     </div>
+    <script>
+      const out = document.getElementById("out");
+      const btn = document.getElementById("run");
+      const url = document.getElementById("url");
+      btn.addEventListener("click", async () => {
+        const target = url.value.trim();
+        if (!target) {
+          out.textContent = "URLを入力してください。";
+          return;
+        }
+        btn.disabled = true;
+        out.textContent = "実行中...";
+        try {
+          const res = await fetch("/api/fetch", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: target })
+          });
+          const data = await res.json();
+          out.textContent = (data.ok ? "[OK]\n" : "[ERROR]\n") + (data.output || data.error || "");
+        } catch (e) {
+          out.textContent = "[ERROR]\n" + e;
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    </script>
   </body>
 </html>
