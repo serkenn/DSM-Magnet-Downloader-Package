@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DSM Magnet Downloader</title>
+    <style>
+      :root {
+        --bg: #f5f7fa;
+        --card: #ffffff;
+        --text: #1f2937;
+        --muted: #4b5563;
+        --accent: #0f766e;
+        --line: #d1d5db;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: linear-gradient(180deg, #eef6ff 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+      .wrap {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 6px 30px rgba(15, 23, 42, 0.08);
+      }
+      h1 { margin: 0 0 12px; font-size: 28px; }
+      p { margin: 0 0 14px; color: var(--muted); line-height: 1.6; }
+      .cmd {
+        display: block;
+        margin: 8px 0;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #f9fafb;
+        font-family: Menlo, Monaco, monospace;
+        color: #111827;
+        overflow-x: auto;
+      }
+      .tag {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #d1fae5;
+        color: #065f46;
+        font-size: 12px;
+        margin-bottom: 12px;
+      }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <span class="tag">Package UI</span>
+        <h1>DSM Magnet Downloader</h1>
+        <p>このパッケージはバックグラウンドスクリプト中心です。現在のUIはステータス確認と実行案内用です。</p>
+        <p>ログ確認:</p>
+        <code class="cmd">cat /var/packages/dsm-magnet-dl/var/package.log</code>
+        <p>手動実行例:</p>
+        <code class="cmd">python3 /var/packages/dsm-magnet-dl/target/magnet_fetcher.py "https://example.com/..."</code>
+        <p>リポジトリ: <a href="https://github.com/serkenn/DSM-Magnet-Downloader-Package" target="_blank" rel="noopener">GitHub</a></p>
+      </div>
+    </div>
+  </body>
+</html>

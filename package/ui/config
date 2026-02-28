@@ -1,0 +1,15 @@
+{
+  "app": {
+    "id": "com.serkenn.dsm-magnet-dl",
+    "name": "DSM Magnet Downloader",
+    "version": "1.0.9-0001",
+    "type": "url",
+    "icon": "images/app_72.png",
+    "url": "3rdparty/dsm-magnet-dl/index.html",
+    "width": 980,
+    "height": 700,
+    "resizable": true,
+    "maximized": false,
+    "minimizable": true
+  }
+}
