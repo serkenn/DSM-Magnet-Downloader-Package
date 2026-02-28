@@ -44,7 +44,6 @@ output_file="${DIST_DIR}/${package_name}-${version}.spk"
 rm -rf "${TMP_DIR}"
 mkdir -p "${TMP_DIR}"
 
-cp "${INFO_FILE}" "${TMP_DIR}/INFO"
 cp -R "${SPK_META_DIR}/scripts" "${TMP_DIR}/scripts"
 cp -R "${SPK_META_DIR}/conf" "${TMP_DIR}/conf"
 cp "${SPK_META_DIR}/PACKAGE_ICON.PNG" "${TMP_DIR}/PACKAGE_ICON.PNG"
@@ -65,8 +64,18 @@ tar -C "${PAYLOAD_DIR}" -czf "${TMP_DIR}/package.tgz" \
   --exclude "INFO/package.info" \
   .
 
+# Generate INFO with checksum matching package.tgz (Synology/SPK convention).
+if command -v md5sum >/dev/null 2>&1; then
+  checksum="$(md5sum "${TMP_DIR}/package.tgz" | awk '{print $1}')"
+else
+  checksum="$(md5 -q "${TMP_DIR}/package.tgz")"
+fi
+
+grep -v '^checksum=' "${INFO_FILE}" > "${TMP_DIR}/INFO"
+echo "checksum=\"${checksum}\"" >> "${TMP_DIR}/INFO"
+
 rm -f "${output_file}"
-tar -C "${TMP_DIR}" -czf "${output_file}" \
+tar -C "${TMP_DIR}" -cf "${output_file}" \
   INFO \
   package.tgz \
   scripts \
