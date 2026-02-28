@@ -18,7 +18,17 @@ if [ -f "${RUNTIME_CONF}" ]; then
   . "${RUNTIME_CONF}"
 fi
 
-for CAND in python3 /usr/local/bin/python3 /bin/python3 /usr/bin/python3; do
+for CAND in \
+  /var/packages/Python3/target/usr/local/bin/python3 \
+  /usr/local/bin/python3 \
+  /bin/python3 \
+  /usr/bin/python3 \
+  python3
+do
+  if [ -x "${CAND}" ]; then
+    PY_BIN="${CAND}"
+    break
+  fi
   if command -v "${CAND}" >/dev/null 2>&1; then
     PY_BIN="$(command -v "${CAND}")"
     break

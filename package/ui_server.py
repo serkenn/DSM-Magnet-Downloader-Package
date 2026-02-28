@@ -2,6 +2,7 @@
 import json
 import os
 import subprocess
+import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 PKG_NAME = "dsm-magnet-dl"
@@ -149,7 +150,7 @@ class Handler(BaseHTTPRequestHandler):
 
         s = load_settings()
         cmd = [
-            "python3",
+            sys.executable,
             os.path.join(TARGET_DIR, "magnet_fetcher.py"),
             url,
             "--host",
