@@ -1,20 +1,39 @@
 #!/bin/sh
+set -eu
 
 TARGET_DIR="/var/packages/${SYNOPKG_PKGNAME}/target"
+VAR_DIR="/var/packages/${SYNOPKG_PKGNAME}/var"
+LOG_FILE="${VAR_DIR}/package.log"
+WG_CONF="/usr/local/etc/mullvad-wg.conf"
+
+mkdir -p "${VAR_DIR}"
+exec >>"${LOG_FILE}" 2>&1
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] action=$1"
 
 case "$1" in
   start)
-    if [ -x "${TARGET_DIR}/start.sh" ]; then
-      "${TARGET_DIR}/start.sh" || exit 1
+    if [ ! -x "${TARGET_DIR}/start.sh" ]; then
+      echo "start.sh is missing or not executable: ${TARGET_DIR}/start.sh"
+      exit 1
     fi
+    "${TARGET_DIR}/start.sh"
     ;;
   stop)
-    if [ -x "${TARGET_DIR}/stop.sh" ]; then
-      "${TARGET_DIR}/stop.sh" || exit 1
+    if [ ! -x "${TARGET_DIR}/stop.sh" ]; then
+      echo "stop.sh is missing or not executable: ${TARGET_DIR}/stop.sh"
+      exit 1
     fi
+    "${TARGET_DIR}/stop.sh"
     ;;
   status)
-    exit 3
+    if [ -f "${WG_CONF}" ]; then
+      IF_NAME="$(basename "${WG_CONF}" .conf)"
+      if /usr/local/bin/wg show "${IF_NAME}" >/dev/null 2>&1; then
+        exit 0
+      fi
+    fi
+    exit 1
     ;;
   prestart|prestop)
     ;;

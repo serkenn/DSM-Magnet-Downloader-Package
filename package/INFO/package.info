@@ -1,6 +1,6 @@
 package="dsm-magnet-dl"
 displayname="DSM Magnet Downloader"
-version="1.0.2-0001"
+version="1.0.3-0001"
 description="Magnet fetch helper with Transmission and Mullvad VPN for Synology DSM"
 maintainer="serkenn"
 maintainer_url="https://github.com/serkenn/DSM-Magnet-Downloader-Package"

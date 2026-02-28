@@ -2,6 +2,7 @@
 # mullvad_connect.sh
 # Mullvad WireGuard自動接続スクリプト
 # 必要: Mullvadアカウント、WireGuard設定ファイル(mullvad-wg.conf)
+set -eu
 
 WG_CONF="/usr/local/etc/mullvad-wg.conf"
 WG_BIN="/usr/local/bin/wg-quick"
@@ -16,5 +17,5 @@ if [ ! -x "$WG_BIN" ]; then
   exit 1
 fi
 
-sudo $WG_BIN up "$WG_CONF"
+$WG_BIN up "$WG_CONF"
 echo "Mullvad VPN(WireGuard)に接続しました。"

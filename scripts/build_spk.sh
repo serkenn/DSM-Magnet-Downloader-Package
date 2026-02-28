@@ -54,7 +54,12 @@ if [[ -f "${ROOT_DIR}/LICENSE" ]]; then
   cp "${ROOT_DIR}/LICENSE" "${TMP_DIR}/LICENSE"
 fi
 
-tar -C "${PACKAGE_DIR}" -czf "${TMP_DIR}/package.tgz" \
+PAYLOAD_DIR="${TMP_DIR}/payload"
+cp -R "${PACKAGE_DIR}" "${PAYLOAD_DIR}"
+chmod 755 "${PAYLOAD_DIR}/start.sh" "${PAYLOAD_DIR}/stop.sh" "${PAYLOAD_DIR}/mullvad_connect.sh" || true
+chmod 644 "${PAYLOAD_DIR}/magnet_fetcher.py" || true
+
+tar -C "${PAYLOAD_DIR}" -czf "${TMP_DIR}/package.tgz" \
   --exclude "INFO" \
   --exclude "INFO/*" \
   --exclude "INFO/package.info" \
