@@ -185,9 +185,17 @@ def main() -> None:
     os.makedirs(VAR_DIR, exist_ok=True)
     if not os.path.isfile(SETTINGS_FILE):
         save_settings(DEFAULT_SETTINGS)
-    server = HTTPServer(("0.0.0.0", PORT), Handler)
+    try:
+        server = HTTPServer(("0.0.0.0", PORT), Handler)
+    except Exception as e:
+        log(f"[ui] server bind failed on :{PORT}: {e}")
+        raise
     log(f"[ui] server started on :{PORT}")
-    server.serve_forever()
+    try:
+        server.serve_forever()
+    except Exception as e:
+        log(f"[ui] server crashed: {e}")
+        raise
 
 
 if __name__ == "__main__":
