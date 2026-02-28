@@ -9,7 +9,7 @@
 2. `magnet_fetcher.py` を実行して、magnetリンクをTransmissionに投入します。
 
 ```
-python3 magnet_fetcher.py "https://sukebei.nyaa.si/?f=0&c=0_0&q=AliceHolic13"
+python3 magnet_fetcher.py "https://example.com/?f=0&c=0_0&q=example"
 ```
 
 ## SEED最小化設定例（transmission-daemon）
