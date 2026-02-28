@@ -17,103 +17,189 @@
       body {
         margin: 0;
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        background: linear-gradient(180deg, #eef6ff 0%, var(--bg) 100%);
+        background: linear-gradient(180deg, #eef9f4 0%, var(--bg) 100%);
         color: var(--text);
       }
-      .wrap {
-        max-width: 900px;
-        margin: 40px auto;
-        padding: 0 16px;
-      }
+      .wrap { max-width: 980px; margin: 28px auto; padding: 0 16px; }
       .card {
         background: var(--card);
         border: 1px solid var(--line);
         border-radius: 12px;
-        padding: 24px;
+        padding: 20px;
         box-shadow: 0 6px 30px rgba(15, 23, 42, 0.08);
       }
-      h1 { margin: 0 0 12px; font-size: 28px; }
-      p { margin: 0 0 14px; color: var(--muted); line-height: 1.6; }
-      label { display: block; margin: 0 0 8px; font-weight: 600; }
-      input {
-        width: 100%;
-        padding: 11px 12px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        font-size: 14px;
+      .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+      @media (min-width: 860px) { .grid { grid-template-columns: 1.1fr 1fr; } }
+      h1 { margin: 0 0 8px; font-size: 28px; }
+      h2 { margin: 0 0 10px; font-size: 18px; }
+      p { margin: 0 0 12px; color: var(--muted); line-height: 1.5; }
+      label { display: block; margin: 0 0 6px; font-weight: 600; font-size: 13px; }
+      input[type="text"], input[type="number"], input[type="password"] {
+        width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px;
       }
-      button {
-        margin-top: 12px;
-        border: 0;
-        background: var(--accent);
-        color: #fff;
-        border-radius: 8px;
-        padding: 11px 16px;
-        font-weight: 600;
-        cursor: pointer;
-      }
-      button:disabled { opacity: 0.65; cursor: default; }
+      .row { margin-bottom: 10px; }
+      .flex { display: grid; grid-template-columns: 1fr 120px; gap: 10px; }
+      .btn { border: 0; border-radius: 8px; padding: 11px 14px; font-weight: 700; cursor: pointer; }
+      .btn-main { background: var(--accent); color: #fff; }
+      .btn-sub { background: #e5e7eb; color: #111827; }
+      .actions { display: flex; gap: 10px; margin-top: 10px; }
+      .checkbox { display: flex; align-items: center; gap: 8px; margin: 8px 0 12px; }
       pre {
-        margin: 16px 0 0;
+        margin: 10px 0 0;
         background: #0f172a;
         color: #e2e8f0;
         border-radius: 8px;
         padding: 12px;
-        min-height: 180px;
+        min-height: 200px;
         overflow: auto;
         font-family: Menlo, Monaco, monospace;
         font-size: 12px;
       }
-      .cmd {
-        display: block;
-        margin: 8px 0;
-        padding: 10px 12px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #f9fafb;
-        font-family: Menlo, Monaco, monospace;
-        color: #111827;
-        overflow-x: auto;
-      }
-      .tag {
-        display: inline-block;
-        padding: 4px 10px;
-        border-radius: 999px;
-        background: #d1fae5;
-        color: #065f46;
-        font-size: 12px;
-        margin-bottom: 12px;
-      }
+      .muted { color: var(--muted); font-size: 12px; }
+      .ok { color: #047857; }
+      .err { color: #b91c1c; }
       a { color: var(--accent); text-decoration: none; }
-      a:hover { text-decoration: underline; }
     </style>
   </head>
   <body>
     <div class="wrap">
       <div class="card">
-        <span class="tag">Package UI v2</span>
         <h1>DSM Magnet Downloader</h1>
-        <p>URLを入力して magnet の取得と Transmission 追加を実行します。</p>
-        <label for="url">検索ページURL</label>
-        <input id="url" placeholder="https://example.com/?q=keyword" />
-        <button id="run">実行</button>
-        <pre id="out">準備完了</pre>
-        <p>ログ確認:</p>
-        <code class="cmd">cat /var/packages/dsm-magnet-dl/var/package.log</code>
-        <p>リポジトリ: <a href="https://github.com/serkenn/DSM-Magnet-Downloader-Package" target="_blank" rel="noopener">GitHub</a></p>
+        <p>URL入力で magnet 取得を実行し、設定はこの画面で保存できます。</p>
+        <div class="grid">
+          <section>
+            <h2>実行</h2>
+            <div class="row">
+              <label for="fetch-url">検索ページURL</label>
+              <input id="fetch-url" type="text" placeholder="https://example.com/?q=keyword" />
+            </div>
+            <div class="actions">
+              <button id="run" class="btn btn-main">実行</button>
+            </div>
+            <pre id="out">準備完了</pre>
+          </section>
+
+          <section>
+            <h2>設定</h2>
+            <div class="row">
+              <label for="proxy-url">Proxy URL (任意)</label>
+              <input id="proxy-url" type="text" placeholder="http://127.0.0.1:7890" />
+            </div>
+            <div class="row">
+              <label>Transmission</label>
+              <div class="flex">
+                <input id="tr-host" type="text" placeholder="localhost" />
+                <input id="tr-port" type="number" min="1" max="65535" placeholder="9091" />
+              </div>
+            </div>
+            <div class="row">
+              <label for="tr-user">Transmission Username (任意)</label>
+              <input id="tr-user" type="text" placeholder="user" />
+            </div>
+            <div class="row">
+              <label for="tr-pass">Transmission Password (任意)</label>
+              <input id="tr-pass" type="password" placeholder="password" />
+            </div>
+            <div class="row">
+              <label for="wg-conf">Mullvad WG config path</label>
+              <input id="wg-conf" type="text" placeholder="/usr/local/etc/mullvad-wg.conf" />
+            </div>
+            <div class="row">
+              <label for="wg-bin">wg-quick path</label>
+              <input id="wg-bin" type="text" placeholder="/usr/local/bin/wg-quick" />
+            </div>
+            <label class="checkbox"><input id="require-vpn" type="checkbox" /> VPN接続失敗時は起動失敗にする</label>
+            <div class="actions">
+              <button id="save" class="btn btn-main">設定保存</button>
+              <button id="reload" class="btn btn-sub">再読込</button>
+            </div>
+            <p id="status" class="muted">設定ロード中...</p>
+            <p class="muted">ログ: <code>cat /var/packages/dsm-magnet-dl/var/package.log</code></p>
+            <p class="muted">リポジトリ: <a href="https://github.com/serkenn/DSM-Magnet-Downloader-Package">GitHub</a></p>
+          </section>
+        </div>
       </div>
     </div>
     <script>
       const out = document.getElementById("out");
-      const btn = document.getElementById("run");
-      const url = document.getElementById("url");
-      btn.addEventListener("click", async () => {
-        const target = url.value.trim();
+      const statusEl = document.getElementById("status");
+      const runBtn = document.getElementById("run");
+      const saveBtn = document.getElementById("save");
+      const reloadBtn = document.getElementById("reload");
+
+      const el = {
+        fetchUrl: document.getElementById("fetch-url"),
+        proxyUrl: document.getElementById("proxy-url"),
+        trHost: document.getElementById("tr-host"),
+        trPort: document.getElementById("tr-port"),
+        trUser: document.getElementById("tr-user"),
+        trPass: document.getElementById("tr-pass"),
+        wgConf: document.getElementById("wg-conf"),
+        wgBin: document.getElementById("wg-bin"),
+        requireVpn: document.getElementById("require-vpn")
+      };
+
+      function setStatus(text, ok) {
+        statusEl.textContent = text;
+        statusEl.className = ok ? "ok" : "err";
+      }
+
+      function bindSettings(s) {
+        el.proxyUrl.value = s.proxy_url || "";
+        el.trHost.value = s.transmission_host || "localhost";
+        el.trPort.value = s.transmission_port || 9091;
+        el.trUser.value = s.transmission_user || "";
+        el.trPass.value = s.transmission_password || "";
+        el.wgConf.value = s.wg_conf || "/usr/local/etc/mullvad-wg.conf";
+        el.wgBin.value = s.wg_bin || "/usr/local/bin/wg-quick";
+        el.requireVpn.checked = !!s.require_vpn;
+      }
+
+      async function loadSettings() {
+        try {
+          const res = await fetch("/api/settings");
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || "load failed");
+          bindSettings(data.settings || {});
+          setStatus("設定を読み込みました", true);
+        } catch (e) {
+          setStatus("設定読み込みに失敗: " + e, false);
+        }
+      }
+
+      async function saveSettings() {
+        const payload = {
+          proxy_url: el.proxyUrl.value.trim(),
+          transmission_host: el.trHost.value.trim(),
+          transmission_port: Number(el.trPort.value || 9091),
+          transmission_user: el.trUser.value.trim(),
+          transmission_password: el.trPass.value,
+          wg_conf: el.wgConf.value.trim(),
+          wg_bin: el.wgBin.value.trim(),
+          require_vpn: el.requireVpn.checked
+        };
+        try {
+          const res = await fetch("/api/settings", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || "save failed");
+          bindSettings(data.settings || payload);
+          setStatus("設定を保存しました（次回起動時にMullvad設定反映）", true);
+        } catch (e) {
+          setStatus("設定保存に失敗: " + e, false);
+        }
+      }
+
+      runBtn.addEventListener("click", async () => {
+        const target = el.fetchUrl.value.trim();
         if (!target) {
           out.textContent = "URLを入力してください。";
           return;
         }
-        btn.disabled = true;
+        runBtn.disabled = true;
         out.textContent = "実行中...";
         try {
           const res = await fetch("/api/fetch", {
@@ -126,9 +212,13 @@
         } catch (e) {
           out.textContent = "[ERROR]\n" + e;
         } finally {
-          btn.disabled = false;
+          runBtn.disabled = false;
         }
       });
+
+      saveBtn.addEventListener("click", saveSettings);
+      reloadBtn.addEventListener("click", loadSettings);
+      loadSettings();
     </script>
   </body>
 </html>

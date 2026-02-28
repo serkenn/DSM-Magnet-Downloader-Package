@@ -4,8 +4,8 @@
 # 必要: Mullvadアカウント、WireGuard設定ファイル(mullvad-wg.conf)
 set -eu
 
-WG_CONF="/usr/local/etc/mullvad-wg.conf"
-WG_BIN="/usr/local/bin/wg-quick"
+WG_CONF="${WG_CONF:-/usr/local/etc/mullvad-wg.conf}"
+WG_BIN="${WG_BIN:-/usr/local/bin/wg-quick}"
 REQUIRE_VPN="${REQUIRE_VPN:-0}"
 
 warn_and_maybe_exit() {

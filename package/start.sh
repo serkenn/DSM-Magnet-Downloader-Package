@@ -7,11 +7,17 @@ PKG_NAME="dsm-magnet-dl"
 VAR_DIR="/var/packages/${PKG_NAME}/var"
 PID_FILE="${VAR_DIR}/ui-http.pid"
 LOG_FILE="${VAR_DIR}/package.log"
+RUNTIME_CONF="${VAR_DIR}/runtime.conf"
 UI_DIR="$(dirname "$0")/ui"
 UI_PORT="${UI_PORT:-18765}"
 PY_BIN="$(command -v python3 || true)"
 
 mkdir -p "${VAR_DIR}"
+
+if [ -f "${RUNTIME_CONF}" ]; then
+  # shellcheck disable=SC1090
+  . "${RUNTIME_CONF}"
+fi
 
 # VPN接続
 "$(dirname "$0")/mullvad_connect.sh"
