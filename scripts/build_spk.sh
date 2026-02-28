@@ -66,7 +66,7 @@ tar -C "${PAYLOAD_DIR}" -czf "${TMP_DIR}/package.tgz" \
   .
 
 rm -f "${output_file}"
-tar -C "${TMP_DIR}" -cf "${output_file}" \
+tar -C "${TMP_DIR}" -czf "${output_file}" \
   INFO \
   package.tgz \
   scripts \
