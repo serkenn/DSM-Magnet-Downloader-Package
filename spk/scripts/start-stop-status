@@ -1,0 +1,23 @@
+#!/bin/sh
+
+TARGET_DIR="/var/packages/${SYNOPKG_PKGNAME}/target"
+
+case "$1" in
+  start)
+    if [ -x "${TARGET_DIR}/start.sh" ]; then
+      "${TARGET_DIR}/start.sh" || exit 1
+    fi
+    ;;
+  stop)
+    if [ -x "${TARGET_DIR}/stop.sh" ]; then
+      "${TARGET_DIR}/stop.sh" || exit 1
+    fi
+    ;;
+  status)
+    exit 3
+    ;;
+  prestart|prestop)
+    ;;
+esac
+
+exit 0

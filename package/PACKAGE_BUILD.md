@@ -21,7 +21,7 @@ package/
 
 出力例:
 ```
-dist/dsm-magnet-dl-1.0.0.spk
+dist/dsm-magnet-dl-<version>.spk
 ```
 
 # GitHub Actions（自動ビルド）
