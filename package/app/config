@@ -1,0 +1,16 @@
+{
+  ".url": {
+    "com.serkenn.dsm-magnet-dl": {
+      "title": "DSM Magnet Downloader",
+      "desc": "Magnet fetch helper with Transmission and Mullvad VPN for Synology DSM",
+      "icon": "images/app-{0}.png",
+      "type": "url",
+      "protocol": "http",
+      "port": "18765",
+      "url": "/",
+      "allUsers": true,
+      "grantPrivilege": "all",
+      "advanceGrantPrivilege": true
+    }
+  }
+}

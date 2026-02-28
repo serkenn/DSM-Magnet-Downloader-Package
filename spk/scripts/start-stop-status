@@ -5,6 +5,7 @@ TARGET_DIR="/var/packages/${SYNOPKG_PKGNAME}/target"
 VAR_DIR="/var/packages/${SYNOPKG_PKGNAME}/var"
 LOG_FILE="${VAR_DIR}/package.log"
 RUN_MARKER="${VAR_DIR}/running"
+PID_FILE="${VAR_DIR}/ui-http.pid"
 
 mkdir -p "${VAR_DIR}"
 exec >>"${LOG_FILE}" 2>&1
@@ -29,7 +30,7 @@ case "$1" in
     rm -f "${RUN_MARKER}"
     ;;
   status)
-    if [ -f "${RUN_MARKER}" ]; then
+    if [ -f "${PID_FILE}" ] && kill -0 "$(cat "${PID_FILE}")" 2>/dev/null; then
       exit 0
     fi
     exit 1
