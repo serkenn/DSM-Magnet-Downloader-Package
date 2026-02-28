@@ -9,6 +9,7 @@ PID_FILE="${VAR_DIR}/ui-http.pid"
 LOG_FILE="${VAR_DIR}/package.log"
 RUNTIME_CONF="${VAR_DIR}/runtime.conf"
 UI_PORT="${UI_PORT:-18765}"
+REQUIRE_UI="${REQUIRE_UI:-0}"
 PY_BIN=""
 
 mkdir -p "${VAR_DIR}"
@@ -45,8 +46,9 @@ if [ -f "${PID_FILE}" ] && kill -0 "$(cat "${PID_FILE}")" 2>/dev/null; then
 fi
 
 if [ -z "${PY_BIN}" ]; then
-  echo "python3 command is not available. Please install Python3 package on DSM."
-  exit 1
+  echo "python3 command is not available. UI server will be skipped."
+  echo "DSM Magnet Downloaderパッケージ起動完了 (UI skipped)"
+  exit 0
 fi
 
 "${PY_BIN}" --version >>"${LOG_FILE}" 2>&1 || true
@@ -55,7 +57,10 @@ echo $! > "${PID_FILE}"
 sleep 1
 if ! kill -0 "$(cat "${PID_FILE}")" 2>/dev/null; then
   echo "UI server failed to start on port ${UI_PORT}. Check ${LOG_FILE}."
-  exit 1
+  rm -f "${PID_FILE}"
+  if [ "${REQUIRE_UI}" = "1" ]; then
+    exit 1
+  fi
 fi
 
 echo "DSM Magnet Downloaderパッケージ起動完了"
