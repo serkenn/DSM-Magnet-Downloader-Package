@@ -6,16 +6,23 @@ set -eu
 
 WG_CONF="/usr/local/etc/mullvad-wg.conf"
 WG_BIN="/usr/local/bin/wg-quick"
+REQUIRE_VPN="${REQUIRE_VPN:-0}"
+
+warn_and_maybe_exit() {
+  echo "$1"
+  if [ "${REQUIRE_VPN}" = "1" ]; then
+    exit 1
+  fi
+  exit 0
+}
 
 if [ ! -f "$WG_CONF" ]; then
-  echo "WireGuard設定ファイルが見つかりません: $WG_CONF"
-  exit 1
+  warn_and_maybe_exit "WireGuard設定ファイルが見つかりません: $WG_CONF"
 fi
 
 if [ ! -x "$WG_BIN" ]; then
-  echo "wg-quickコマンドが見つかりません: $WG_BIN"
-  exit 1
+  warn_and_maybe_exit "wg-quickコマンドが見つかりません: $WG_BIN"
 fi
 
-$WG_BIN up "$WG_CONF"
+$WG_BIN up "$WG_CONF" || warn_and_maybe_exit "WireGuard接続に失敗しました: $WG_CONF"
 echo "Mullvad VPN(WireGuard)に接続しました。"

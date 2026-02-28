@@ -4,7 +4,7 @@ set -eu
 TARGET_DIR="/var/packages/${SYNOPKG_PKGNAME}/target"
 VAR_DIR="/var/packages/${SYNOPKG_PKGNAME}/var"
 LOG_FILE="${VAR_DIR}/package.log"
-WG_CONF="/usr/local/etc/mullvad-wg.conf"
+RUN_MARKER="${VAR_DIR}/running"
 
 mkdir -p "${VAR_DIR}"
 exec >>"${LOG_FILE}" 2>&1
@@ -18,20 +18,19 @@ case "$1" in
       exit 1
     fi
     "${TARGET_DIR}/start.sh"
+    touch "${RUN_MARKER}"
     ;;
   stop)
-    if [ ! -x "${TARGET_DIR}/stop.sh" ]; then
+    if [ -x "${TARGET_DIR}/stop.sh" ]; then
+      "${TARGET_DIR}/stop.sh"
+    else
       echo "stop.sh is missing or not executable: ${TARGET_DIR}/stop.sh"
-      exit 1
     fi
-    "${TARGET_DIR}/stop.sh"
+    rm -f "${RUN_MARKER}"
     ;;
   status)
-    if [ -f "${WG_CONF}" ]; then
-      IF_NAME="$(basename "${WG_CONF}" .conf)"
-      if /usr/local/bin/wg show "${IF_NAME}" >/dev/null 2>&1; then
-        exit 0
-      fi
+    if [ -f "${RUN_MARKER}" ]; then
+      exit 0
     fi
     exit 1
     ;;
